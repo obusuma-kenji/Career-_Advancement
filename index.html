@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キャリアアップ助成金 正社員化コース 完全ガイド</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Professional -->
+    <!-- Application Structure Plan: The application is structured into four distinct, task-oriented sections: 1. Overview, 2. Subsidy Simulator, 3. Application Flow, and 4. Required Documents Checklist. This structure was chosen over a linear report format to cater to the user's journey. A user (business owner/HR) first needs to understand the basics (Overview), then see the financial benefit for their specific case (Simulator), understand the process to achieve it (Flow), and finally get a practical tool for execution (Checklist). Navigation is handled by a sticky header, allowing users to jump to the section most relevant to their immediate needs, making the complex information highly accessible and usable. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Subsidy amounts based on company size, employee type, and priority status. -> Goal: Compare, Personalize. -> Viz/Presentation: Interactive radio buttons and a dynamic bar chart. -> Interaction: User selects their parameters, and the chart and summary text update instantly to show their specific subsidy amount. -> Justification: This transforms a complex data table into an engaging, personalized tool, providing immediate value. -> Library: Chart.js (Canvas).
+        - Report Info: The multi-step application procedure. -> Goal: Organize, Clarify Process. -> Viz/Presentation: A vertical timeline diagram built with HTML/CSS. -> Interaction: Each step is a clickable card that expands to reveal detailed information, deadlines, and key actions. -> Justification: This breaks down a daunting process into manageable, sequential steps, preventing information overload. -> Library/Method: HTML/CSS/Tailwind + JS.
+        - Report Info: A list of required application documents. -> Goal: Inform, Actionable Tool. -> Viz/Presentation: An interactive checklist. -> Interaction: Users can check off items. Info icons next to each item could provide more details upon interaction. -> Justification: Provides a practical, reusable tool for users to track their application preparation progress. -> Library/Method: HTML/CSS/Tailwind + JS.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 40vh;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .step-connector {
+            position: absolute;
+            left: 2.5rem;
+            top: 4rem;
+            bottom: -2rem;
+            width: 2px;
+            background-color: #d1d5db;
+            z-index: -1;
+        }
+        .step:last-child .step-connector {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-gray-900">キャリアアップ助成金</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">概要</a>
+                        <a href="#simulator" class="text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">助成額シミュレーター</a>
+                        <a href="#flow" class="text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">申請フロー</a>
+                        <a href="#checklist" class="text-gray-600 hover:bg-gray-200 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">必要書類</a>
+                    </div>
+                </div>
+                 <div class="md:hidden">
+                    <select id="mobile-nav" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="#overview">概要</option>
+                        <option value="#simulator">シミュレーター</option>
+                        <option value="#flow">申請フロー</option>
+                        <option value="#checklist">必要書類</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+
+        <section id="overview" class="scroll-mt-20 mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">正社員化コース 完全ガイド</h2>
+                <p class="mt-4 text-lg leading-8 text-gray-600">非正規雇用労働者のキャリアアップを支援する制度を分かりやすく解説します。</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">制度の概要</h3>
+                <p class="text-base text-gray-700 leading-relaxed mb-6">
+                    このセクションでは、「キャリアアップ助成金 正社員化コース」の基本的な目的と、2025年度の主な変更点について解説します。本助成金は、有期雇用労働者や派遣労働者などを正規雇用に転換する事業主を支援する制度です。雇用の安定と労働者の意欲向上を図ることで、企業の生産性向上にも繋がります。制度を正しく理解し、自社の状況に合わせた活用を検討しましょう。
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">目的と対象</h4>
+                        <p class="text-gray-700">有期雇用労働者、無期雇用労働者、派遣労働者などを正規雇用に転換し、その労働者のキャリアアップを促進する事業主を支援します。雇用の安定化が主な目的です。</p>
+                    </div>
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">2025年度の主な変更点</h4>
+                        <p class="text-gray-700">新たに「重点支援対象者」の区分が設けられました。これに該当しない場合、助成額が従来の半額程度に変更されています。対象者の条件を正確に把握することが重要です。</p>
+                    </div>
+                </div>
+                 <div class="mt-8 bg-gray-100 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">重要な要件：賃金3%以上増額</h4>
+                    <p class="text-gray-700">助成金を受給するためには、正規雇用への転換前6か月の賃金総額と比較して、転換後6か月の賃金総額を<strong class="text-red-600 font-bold">3%以上</strong>増額させる必要があります。基本給や定額で支給される諸手当で増額を検討してください。賞与や通勤手当、住宅手当などは対象外です。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulator" class="scroll-mt-20 mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">助成額シミュレーター</h2>
+                <p class="mt-4 text-lg leading-8 text-gray-600">あなたの会社のケースではいくら受給できるか、簡単な選択で試算します。</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <p class="text-base text-gray-700 leading-relaxed mb-6">
+                   ここでは、自社の状況に合わせて受給できる助成額をシミュレーションできます。企業の規模、転換する労働者の雇用形態、そして「重点支援対象者」に該当するかどうかを選択してください。結果は下のグラフとテキストで即座に表示されます。このシミュレーションを通じて、制度活用の具体的なメリットを把握しましょう。
+                </p>
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <h4 class="font-semibold mb-2">1. 企業規模</h4>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center"><input type="radio" name="companySize" value="sme" checked class="mr-2">中小企業</label>
+                            <label class="flex items-center"><input type="radio" name="companySize" value="large" class="mr-2">大企業</label>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">2. 転換前の雇用形態</h4>
+                        <div class="flex space-x-4">
+                             <label class="flex items-center"><input type="radio" name="employeeType" value="yuki" checked class="mr-2">有期雇用</label>
+                             <label class="flex items-center"><input type="radio" name="employeeType" value="muki" class="mr-2">無期雇用</label>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">3. 重点支援対象者か？</h4>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center"><input type="radio" name="priority" value="yes" checked class="mr-2">はい</label>
+                            <label class="flex items-center"><input type="radio" name="priority" value="no" class="mr-2">いいえ</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <div class="chart-container mb-6">
+                        <canvas id="subsidyChart"></canvas>
+                    </div>
+                    <div id="resultText" class="text-center">
+                        <p class="text-2xl font-bold text-gray-900">合計支給額: <span id="totalAmount" class="text-blue-600">800,000円</span></p>
+                        <p class="text-gray-600 mt-1" id="breakdownText">1期目(6か月後): 400,000円 + 2期目(12か月後): 400,000円</p>
+                    </div>
+                </div>
+                 <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-md">
+                    <h5 class="font-bold">重点支援対象者とは？</h5>
+                    <ul class="list-disc list-inside mt-2 text-sm">
+                        <li>雇入れから3年以上の有期雇用労働者</li>
+                        <li>雇入れ3年未満で、過去5年間に正規雇用だった期間が1年以下の有期雇用労働者</li>
+                        <li>派遣労働者、母子家庭の母・父子家庭の父など</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="flow" class="scroll-mt-20 mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">申請フロー</h2>
+                <p class="mt-4 text-lg leading-8 text-gray-600">助成金受給までの道のりをステップバイステップで確認しましょう。</p>
+            </div>
+             <div class="bg-white p-8 rounded-xl shadow-lg">
+                <p class="text-base text-gray-700 leading-relaxed mb-8">
+                    助成金の申請は、正しい手順とタイミングが非常に重要です。このセクションでは、計画書の提出から助成金の受給完了までの全プロセスを、視覚的なタイムラインで解説します。各ステップをクリックすると、具体的な作業内容や注意すべきポイント、提出期限などの詳細が表示されます。このフローを参考に、計画的に準備を進めましょう。
+                </p>
+                <div id="flow-container" class="space-y-8">
+                </div>
+            </div>
+        </section>
+
+        <section id="checklist" class="scroll-mt-20">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">必要書類チェックリスト</h2>
+                <p class="mt-4 text-lg leading-8 text-gray-600">申請に必要な書類を漏れなく準備するためのリストです。</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <p class="text-base text-gray-700 leading-relaxed mb-8">
+                    最後に、申請時に必要となる主な書類をチェックリスト形式でまとめました。計画段階で必要なものから、支給申請時に提出するものまで網羅しています。各項目のチェックボックスを活用して、準備の進捗管理にご利用ください。特に、就業規則や賃金台帳などは、内容の正確性が厳しく審査されますので、事前の確認が不可欠です。
+                </p>
+                <div id="checklist-container" class="space-y-4">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-400 text-sm">
+            <p>&copy; 2025 キャリアアップ助成金ガイド. このサイトは情報提供を目的としており、内容の正確性を保証するものではありません。</p>
+            <p>最新の情報は必ず厚生労働省の公式ページをご確認ください。</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const subsidyData = {
+                sme: { 
+                    yuki: { yes: [400000, 400000], no: [400000, 0] },
+                    muki: { yes: [200000, 200000], no: [200000, 0] }
+                },
+                large: {
+                    yuki: { yes: [300000, 300000], no: [300000, 0] },
+                    muki: { yes: [150000, 150000], no: [150000, 0] }
+                }
+            };
+
+            const flowData = [
+                {
+                    title: "STEP 1: キャリアアップ計画書の作成・提出",
+                    content: "正社員への転換を実施する「前日まで」に、キャリアアップ計画書を作成し、管轄の労働局へ提出します。計画には、計画期間、対象者、目標、目標達成のために行う措置などを記載します。この計画が全てのスタート地点となります。",
+                    timing: "転換実施の前日まで"
+                },
+                {
+                    title: "STEP 2: 就業規則の改定と届出",
+                    content: "就業規則に「正社員への転換制度」を規定します。試験や面接などの手続き、要件、実施時期を明記し、労働基準監督署へ届け出ます。規定がない場合は助成金の対象外となるため、必須のステップです。",
+                    timing: "転換実施の前まで"
+                },
+                {
+                    title: "STEP 3: 正社員への転換実施",
+                    content: "就業規則に定めた手続きに基づき、対象労働者を正社員へ転換します。労働条件通知書（雇用契約書）を新たに交付し、賃金を3%以上増額させることが重要です。",
+                    timing: "計画期間内"
+                },
+                {
+                    title: "STEP 4: 転換後6か月間の雇用と賃金支払",
+                    content: "正社員として転換後、6か月間継続して雇用し、増額した賃金を支払います。この期間の出勤簿や賃金台帳は支給申請時の重要書類となります。",
+                    timing: "転換後6か月間"
+                },
+                {
+                    title: "STEP 5: 支給申請 (1期目)",
+                    content: "転換後6か月分の賃金を支払った日の翌日から起算して「2か月以内」に、管轄の労働局へ支給申請を行います。期限が厳格なため、遅れないように注意が必要です。",
+                    timing: "賃金支払後2か月以内"
+                },
+                {
+                    title: "STEP 6: (重点支援対象者のみ) さらに6か月の雇用と2期目申請",
+                    content: "対象者が重点支援対象者の場合、さらに6か月（合計12か月）雇用を継続し、賃金を支払います。12か月分の賃金支払日の翌日から2か月以内に2期目の支給申請を行うことで、追加の助成金が支給されます。",
+                    timing: "12か月分の賃金支払後2か月以内"
+                }
+            ];
+            
+            const checklistData = [
+                { title: "キャリアアップ計画書（認定を受けたもの）", description: "計画申請時に提出し、労働局の確認印があるもの。" },
+                { title: "キャリアアップ助成金支給申請書", description: "支給申請時に作成するメインの書類。" },
+                { title: "就業規則（転換制度が規定されたもの）", description: "転換前と転換後の両方が必要になる場合があります。" },
+                { title: "労働条件通知書または雇用契約書", description: "転換前と転換後の両方。賃金3%増額が確認できること。" },
+                { title: "賃金台帳", description: "転換前後それぞれ6か月分。残業代の計算根拠なども含め正確に記載。" },
+                { title: "出勤簿またはタイムカード", description: "転換前後それぞれ6か月分。労働時間の実態が確認できるもの。" },
+                { title: "支給要件確認申立書", description: "他の助成金との重複受給がないかなどを申告する書類。" },
+                { title: "登記事項証明書（法人の場合）", description: "発行から3か月以内のもの。" }
+            ];
+
+            const ctx = document.getElementById('subsidyChart').getContext('2d');
+            let subsidyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['1期目 (6か月後)', '2期目 (12か月後)'],
+                    datasets: [{
+                        label: '支給額 (円)',
+                        data: [400000, 400000],
+                        backgroundColor: ['rgba(59, 130, 246, 0.7)', 'rgba(251, 146, 60, 0.7)'],
+                        borderColor: ['rgba(59, 130, 246, 1)', 'rgba(251, 146, 60, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return value.toLocaleString('ja-JP') + '円';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toLocaleString('ja-JP') + '円';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            function updateSimulator() {
+                const companySize = document.querySelector('input[name="companySize"]:checked').value;
+                const employeeType = document.querySelector('input[name="employeeType"]:checked').value;
+                const priority = document.querySelector('input[name="priority"]:checked').value;
+
+                const amounts = subsidyData[companySize][employeeType][priority];
+                const totalAmount = amounts.reduce((a, b) => a + b, 0);
+
+                subsidyChart.data.datasets[0].data = amounts;
+                subsidyChart.update();
+
+                document.getElementById('totalAmount').textContent = totalAmount.toLocaleString('ja-JP') + '円';
+                if (amounts[1] > 0) {
+                    document.getElementById('breakdownText').textContent = `1期目(6か月後): ${amounts[0].toLocaleString('ja-JP')}円 + 2期目(12か月後): ${amounts[1].toLocaleString('ja-JP')}円`;
+                } else {
+                    document.getElementById('breakdownText').textContent = `1期目(6か月後)のみ: ${amounts[0].toLocaleString('ja-JP')}円`;
+                }
+            }
+            
+            document.querySelectorAll('input[name="companySize"], input[name="employeeType"], input[name="priority"]').forEach(input => {
+                input.addEventListener('change', updateSimulator);
+            });
+
+            const flowContainer = document.getElementById('flow-container');
+            flowData.forEach((step, index) => {
+                const stepEl = document.createElement('div');
+                stepEl.className = 'relative pl-20 pb-8 step';
+                stepEl.innerHTML = `
+                    <div class="step-connector"></div>
+                    <div class="absolute left-0 flex items-center justify-center w-20 h-20 bg-blue-500 text-white font-bold text-2xl rounded-full">
+                        ${index + 1}
+                    </div>
+                    <div class="pl-4">
+                        <div class="cursor-pointer">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-1">${step.title}</h4>
+                            <p class="text-sm font-medium text-blue-600">タイミング: ${step.timing}</p>
+                        </div>
+                        <div class="mt-2 text-gray-600 leading-relaxed hidden">
+                            <p>${step.content}</p>
+                        </div>
+                    </div>
+                `;
+                flowContainer.appendChild(stepEl);
+                
+                stepEl.querySelector('.cursor-pointer').addEventListener('click', (e) => {
+                    const content = e.currentTarget.nextElementSibling;
+                    content.classList.toggle('hidden');
+                });
+            });
+            
+            const checklistContainer = document.getElementById('checklist-container');
+            checklistData.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'bg-gray-50 p-4 rounded-lg flex items-center';
+                itemEl.innerHTML = `
+                    <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <label class="ml-3 text-gray-800 font-medium">${item.title}</label>
+                `;
+                checklistContainer.appendChild(itemEl);
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            document.getElementById('mobile-nav').addEventListener('change', function(e) {
+                 document.querySelector(e.target.value).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+
+            updateSimulator(); 
+        });
+    </script>
+</body>
+</html>
